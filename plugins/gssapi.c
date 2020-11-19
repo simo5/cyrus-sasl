@@ -1567,7 +1567,6 @@ int gssapiv2_server_plug_init(
 {
 #ifdef HAVE_GSSKRB5_REGISTER_ACCEPTOR_IDENTITY
     const char *keytab = NULL;
-    char keytab_path[1024];
     unsigned int rl;
 #endif
     
@@ -1589,15 +1588,7 @@ int gssapiv2_server_plug_init(
 	    return SASL_FAIL;
 	}
 	
-	if(strlen(keytab) > 1024) {
-	    utils->log(NULL, SASL_LOG_ERR,
-		       "path to keytab is > 1024 characters");
-	    return SASL_BUFOVER;
-	}
-	
-	strncpy(keytab_path, keytab, 1024);
-	
-	gsskrb5_register_acceptor_identity(keytab_path);
+	gsskrb5_register_acceptor_identity(keytab);
     }
 #endif
     

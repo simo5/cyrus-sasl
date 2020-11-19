@@ -375,10 +375,14 @@ static unsigned char *P16_lm(unsigned char *P16, sasl_secret_t *passwd,
 			     unsigned *buflen __attribute__((unused)),
 			     int *result)
 {
-    char P14[14];
+    char P14[14] = { 0 };
     unsigned char S8[] = { 0x4b, 0x47, 0x53, 0x21, 0x40, 0x23, 0x24, 0x25 };
 
-    strncpy(P14, (const char *) passwd->data, sizeof(P14));
+    Plen = sizeof(P14);
+    if (passwd->len < Plen) {
+        Plen = passwd->len;
+    }
+    memcpy(P14, (const char *) passwd->data, Plen);
     ucase(P14, sizeof(P14));
 
     E(P16, (unsigned char *) P14, sizeof(P14), S8, sizeof(S8));
